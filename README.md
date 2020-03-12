@@ -123,15 +123,17 @@ _Lors de la définition d'une zone, spécifier l'adresse du sous-réseau IP avec
 
 **LIVRABLE : Remplir le tableau**
 
-| Adresse IP source | Adresse IP destination | Type | Port src | Port dst | Action |
-| :---:             | :---:                  | :---:| :------: | :------: | :----: |
-|                   |                        |      |          |          |        |
-|                   |                        |      |          |          |        |
-|                   |                        |      |          |          |        |
-|                   |                        |      |          |          |        |
-|                   |                        |      |          |          |        |
-|                   |                        |      |          |          |        |
-|                   |                        |      |          |          |        |
+| Adresse IP source | Adresse IP destination | Type  | Port src | Port dst | Action |
+| :---:             | :---:                  | :---: | :------: | :------: | :----: |
+| 192.168.100.0/24  | 192.168.200.0/24       |TCP/UDP|    *     |    53    |  DROP  |
+| 192.168.100.0/24  |     *                  |TCP/UDP|    *     |    53    | ACCEPT |
+| 192.168.100.0/24  |     *                  |ICMP   |          |          | ACCEPT |
+| 192.168.200.0/24  | 192.168.100.0/24       |ICMP   |          |          | ACCEPT |
+| 192.168.100.0/24  |     *                  |TCP    |    *     |    80    | ACCEPT |
+| 192.168.100.0/24  |     *                  |TCP    |    *     |    443   | ACCEPT |
+|       *           | 192.168.200.3          |TCP    |    *     |    80    | ACCEPT |
+| 192.168.100.3     | 192.168.200.3          |TCP    |    *     |    22    | ACCEPT |
+| 192.168.100.3     | 192.168.200.2          |TCP    |    *     |    22    | ACCEPT |
 
 ---
 
