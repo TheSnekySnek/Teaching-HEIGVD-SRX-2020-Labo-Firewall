@@ -421,18 +421,18 @@ Faire une capture du ping.
 
 | De Client\_in\_LAN à | OK/KO | Commentaires et explications |
 | :---                 | :---: | :---                         |
-| Interface DMZ du FW  |       |                              |
-| Interface LAN du FW  |       |                              |
-| Client LAN           |       |                              |
-| Serveur WAN          |       |                              |
+| Interface DMZ du FW  |  KO   |  Le Firewall ne répond pas aux requetes qui lui sont destinées                             |
+| Interface LAN du FW  |  KO   |  Le Firewall ne répond pas aux requetes qui lui sont destinées                            |
+| Client LAN           |  OK   |  Ne passe pas par le firewall                            |
+| Serveur WAN          |  OK   |  Suit les regles misent en place                            |
 
 
 | De Server\_in\_DMZ à | OK/KO | Commentaires et explications |
 | :---                 | :---: | :---                         |
-| Interface DMZ du FW  |       |                              |
-| Interface LAN du FW  |       |                              |
-| Serveur DMZ          |       |                              |
-| Serveur WAN          |       |                              |
+| Interface DMZ du FW  |  KO   |  Le Firewall ne répond pas aux requetes qui lui sont destinées                            |
+| Interface LAN du FW  |  KO   |  Le Firewall ne répond pas aux requetes qui lui sont destinées                            |
+| Serveur DMZ          |  OK   |  Ne passe pas par le firewall                            |
+| Serveur WAN          |  KO   |  Suit les regles misent en place                            |
 
 
 ## Règles pour le protocole DNS
