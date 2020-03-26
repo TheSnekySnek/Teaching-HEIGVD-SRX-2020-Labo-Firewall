@@ -461,7 +461,11 @@ Commandes iptables :
 ---
 
 ```bash
-LIVRABLE : Commandes iptables
+iptables -A FORWARD -s 192.168.100.0/24 -p tcp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -s 192.168.100.0/24 -p udp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+iptables -A FORWARD -d 192.168.100.0/24 -p tcp --sport 53 -m state --state ESTABLISHED -j ACCEPT
+iptables -A FORWARD -d 192.168.100.0/24 -p udp --sport 53 -m state --state ESTABLISHED -j ACCEPT
 ```
 
 ---
