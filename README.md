@@ -123,15 +123,30 @@ _Lors de la définition d'une zone, spécifier l'adresse du sous-réseau IP avec
 
 | Adresse IP source | Adresse IP destination | Type  | Port src | Port dst | Action |
 | :---:             | :---:                  | :---: | :------: | :------: | :----: |
-| 192.168.100.0/24  | 192.168.200.0/24       |TCP/UDP|    *     |    53    |  DROP  |
-| 192.168.100.0/24  |     *                  |TCP/UDP|    *     |    53    | ACCEPT |
-| 192.168.100.0/24  |     *                  |ICMP   |          |          | ACCEPT |
-| 192.168.200.0/24  | 192.168.100.0/24       |ICMP   |          |          | ACCEPT |
-| 192.168.100.0/24  |     *                  |TCP    |    *     |    80    | ACCEPT |
-| 192.168.100.0/24  |     *                  |TCP    |    *     |    443   | ACCEPT |
-|       *           | 192.168.200.3          |TCP    |    *     |    80    | ACCEPT |
-| 192.168.100.3     | 192.168.200.3          |TCP    |    *     |    22    | ACCEPT |
-| 192.168.100.3     | 192.168.200.2          |TCP    |    *     |    22    | ACCEPT |
+|192.168.100.0/24|          *       |  ICMP Echo Request | - | - | ACCEPT|
+|*|          *       |  ICMP Echo Response | - | - | ACCEPT|
+|192.168.200.0/24|          192.168.100.0/24       |  ICMP Echo Request | - | - | ACCEPT|
+|192.168.100.0/24|          *       |  tcp | * | 53 | ACCEPT|
+|192.168.100.0/24|          *       |  udp | * | 53 | ACCEPT|
+|*|          192.168.100.0/24       |  tcp | 53 | * | ACCEPT|
+|*|          192.168.100.0/24       |  udp | 53 | * | ACCEPT|
+|192.168.100.0/24|          *       |  tcp | * | 80 | ACCEPT|
+|192.168.100.0/24|          *       |  tcp | * | 8080 | ACCEPT|
+|*| 192.168.100.0/24 |  tcp | 80 | * | ACCEPT|
+|*| 192.168.100.0/24 |  tcp | 8080 | * | ACCEPT|
+|192.168.100.0/24|          *       |  tcp | * | 443 | ACCEPT|
+|*| 192.168.100.0/24 |  tcp | 443 | * | ACCEPT|
+|192.168.200.3|          *       |  tcp | 80 | * | ACCEPT|
+|*| 192.168.200.3|  tcp | * | 80 | ACCEPT|
+|192.168.100.3| 192.168.200.3 |  tcp | * | 22 | ACCEPT|
+|192.168.200.3| 192.168.100.3 |  tcp | 22 | * | ACCEPT|
+|192.168.100.3| 192.168.100.2 |  tcp | * | 22 | ACCEPT|
+|192.168.100.2| 192.168.100.3 |  tcp | 22 | * | ACCEPT|
+
+
+
+
+
 
 ---
 
