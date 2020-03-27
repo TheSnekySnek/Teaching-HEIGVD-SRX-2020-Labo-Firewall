@@ -228,7 +228,8 @@ ping 192.168.200.3
 ```
 ---
 
-**LIVRABLE : capture d'écran de votre tentative de ping.**  
+**LIVRABLE : capture d'écran de votre tentative de ping.**
+![First ping](images/SRX_ping.png)
 
 ---
 
@@ -284,6 +285,8 @@ ping 192.168.100.3
 ---
 
 **LIVRABLE : capture d'écran de votre nouvelle tentative de ping.**
+![Second ping](images/ping2.png)
+
 
 ---
 
@@ -298,6 +301,7 @@ ping 8.8.8.8
 ---
 
 **LIVRABLE : capture d'écran de votre ping vers l'Internet.**
+![Ping Wan](images/ping_wan.png)
 
 ---
 
@@ -392,7 +396,15 @@ Commandes iptables :
 ---
 
 ```bash
-LIVRABLE : Commandes iptables
+#Allow ping from Lan to DMZ and WAN
+iptables -A FORWARD -s 192.168.100.0/24 -p icmp --icmp-type echo-request -j ACCEPT
+
+#Allow all replies
+iptables -A FORWARD -p icmp --icmp-type echo-reply -j ACCEPT
+
+#Allow dmz -> LAN
+iptables -A FORWARD -s 192.168.200.0/24 -d 192.168.100.0/24 -p icmp --icmp-type echo-request -j ACCEPT
+
 ```
 ---
 
@@ -410,6 +422,8 @@ Faire une capture du ping.
 
 ---
 **LIVRABLE : capture d'écran de votre ping vers l'Internet.**
+![Ping Wan Works](images/ping_wan_work.png)
+
 
 ---
 
@@ -451,6 +465,8 @@ ping www.google.com
 ---
 
 **LIVRABLE : capture d'écran de votre ping.**
+![Ping Google](images/ping_google.png)
+
 
 ---
 
@@ -461,9 +477,11 @@ Commandes iptables :
 ---
 
 ```bash
+#Allow lan dns request
 iptables -A FORWARD -s 192.168.100.0/24 -p tcp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -s 192.168.100.0/24 -p udp --dport 53 -m state --state NEW,ESTABLISHED -j ACCEPT
 
+#Allow DNS response to lan
 iptables -A FORWARD -d 192.168.100.0/24 -p tcp --sport 53 -m state --state ESTABLISHED -j ACCEPT
 iptables -A FORWARD -d 192.168.100.0/24 -p udp --sport 53 -m state --state ESTABLISHED -j ACCEPT
 ```
@@ -478,6 +496,7 @@ iptables -A FORWARD -d 192.168.100.0/24 -p udp --sport 53 -m state --state ESTAB
 ---
 
 **LIVRABLE : capture d'écran de votre ping.**
+![Ping Google Works](images/ping_google_works.png)
 
 ---
 
@@ -488,8 +507,8 @@ iptables -A FORWARD -d 192.168.100.0/24 -p udp --sport 53 -m state --state ESTAB
 
 ---
 **Réponse**
+Le premier ping ne fonctionne pas et fait crash tous les container docker de la machine. Je ne pense pas que c'est voulu
 
-**LIVRABLE : Votre réponse ici...**
 
 ---
 
@@ -509,7 +528,19 @@ Commandes iptables :
 ---
 
 ```bash
-LIVRABLE : Commandes iptables
+#Allow lan http request
+iptables -A FORWARD -s 192.168.100.0/24 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -s 192.168.100.0/24 -p tcp --dport 8080 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+#Allow http response to lan
+iptables -A FORWARD -d 192.168.100.0/24 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+iptables -A FORWARD -d 192.168.100.0/24 -p tcp --sport 8080 -m state --state ESTABLISHED -j ACCEPT
+
+#Allow lan https request
+iptables -A FORWARD -s 192.168.100.0/24 -p tcp --dport 443 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+#Allow https response to lan
+iptables -A FORWARD -d 192.168.100.0/24 -p tcp --sport 443 -m state --state ESTABLISHED -j ACCEPT
 ```
 
 ---
@@ -521,7 +552,11 @@ Commandes iptables :
 ---
 
 ```bash
-LIVRABLE : Commandes iptables
+#Allow http request to dmz
+iptables -A FORWARD -d 192.168.200.0/24 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+#Allow http response from dmz
+iptables -A FORWARD -s 192.168.200.0/24 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
 ```
 ---
 
@@ -531,8 +566,8 @@ LIVRABLE : Commandes iptables
 </ol>
 
 ---
+![Wget Server](images/wget_dmz.png)
 
-**LIVRABLE : capture d'écran.**
 
 ---
 
@@ -549,7 +584,17 @@ Commandes iptables :
 ---
 
 ```bash
-LIVRABLE : Commandes iptables
+#Allow new ssh from lan to dmz
+iptables -A FORWARD -s 192.168.100.0/24 -d 192.168.200.0/24 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+#Allow established ssh from dmz to lan
+iptables -A FORWARD -d 192.168.100.0/24 -s 192.168.200.0/24 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+
+#Allow new ssh from lan to fw
+iptables -A INPUT -s 192.168.100.0/24 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+
+#Allow established ssh from fw to lan
+iptables -A OUTPUT -d 192.168.100.0/24 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 ```
 
 ---
@@ -562,7 +607,8 @@ ssh root@192.168.200.3 (password : celui que vous avez configuré)
 
 ---
 
-**LIVRABLE : capture d'écran de votre connexion ssh.**
+![SSH Dmz](images/ssh_dmz.png)
+
 
 ---
 
@@ -574,7 +620,7 @@ ssh root@192.168.200.3 (password : celui que vous avez configuré)
 ---
 **Réponse**
 
-**LIVRABLE : Votre réponse ici...**
+SSH permet d'obtenir un shell securisé a distance sur un serveur. Cela evite d'avoir un clavier et moniteur sur chaque serveur à administré.
 
 ---
 
@@ -587,7 +633,7 @@ ssh root@192.168.200.3 (password : celui que vous avez configuré)
 ---
 **Réponse**
 
-**LIVRABLE : Votre réponse ici...**
+Il faut éviter de crée une règle qui coupe notre connexion au firewall, sinon il faudra se connecter physiquement au firewall pour l'administrer.
 
 ---
 
@@ -602,6 +648,7 @@ A présent, vous devriez avoir le matériel nécessaire afin de reproduire la ta
 
 ---
 
-**LIVRABLE : capture d'écran avec toutes vos règles.**
+![Rules](images/iptable_rules.png)
+
 
 ---
