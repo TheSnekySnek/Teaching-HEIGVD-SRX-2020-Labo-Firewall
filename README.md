@@ -121,8 +121,6 @@ _Lors de la définition d'une zone, spécifier l'adresse du sous-réseau IP avec
 
 ---
 
-**LIVRABLE : Remplir le tableau**
-
 | Adresse IP source | Adresse IP destination | Type  | Port src | Port dst | Action |
 | :---:             | :---:                  | :---: | :------: | :------: | :----: |
 | 192.168.100.0/24  | 192.168.200.0/24       |TCP/UDP|    *     |    53    |  DROP  |
@@ -228,7 +226,6 @@ ping 192.168.200.3
 ```
 ---
 
-**LIVRABLE : capture d'écran de votre tentative de ping.**
 ![First ping](images/SRX_ping.png)
 
 ---
@@ -284,9 +281,7 @@ ping 192.168.100.3
 
 ---
 
-**LIVRABLE : capture d'écran de votre nouvelle tentative de ping.**
 ![Second ping](images/ping2.png)
-
 
 ---
 
@@ -300,7 +295,6 @@ ping 8.8.8.8
 
 ---
 
-**LIVRABLE : capture d'écran de votre ping vers l'Internet.**
 ![Ping Wan](images/ping_wan.png)
 
 ---
@@ -464,9 +458,7 @@ ping www.google.com
 
 ---
 
-**LIVRABLE : capture d'écran de votre ping.**
 ![Ping Google](images/ping_google.png)
-
 
 ---
 
@@ -495,7 +487,6 @@ iptables -A FORWARD -d 192.168.100.0/24 -p udp --sport 53 -m state --state ESTAB
 
 ---
 
-**LIVRABLE : capture d'écran de votre ping.**
 ![Ping Google Works](images/ping_google_works.png)
 
 ---
