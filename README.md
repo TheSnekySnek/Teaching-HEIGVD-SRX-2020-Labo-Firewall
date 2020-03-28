@@ -559,10 +559,10 @@ Commandes iptables :
 
 ```bash
 #Allow http request to dmz
-iptables -A FORWARD -d 192.168.200.0/24 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -d 192.168.200.3 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
 
 #Allow http response from dmz
-iptables -A FORWARD -s 192.168.200.0/24 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
+iptables -A FORWARD -s 192.168.200.3 -p tcp --sport 80 -m state --state ESTABLISHED -j ACCEPT
 ```
 ---
 
@@ -591,16 +591,16 @@ Commandes iptables :
 
 ```bash
 #Allow new ssh from lan to dmz
-iptables -A FORWARD -s 192.168.100.0/24 -d 192.168.200.0/24 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A FORWARD -s 192.168.100.3 -d 192.168.200.3 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
 
 #Allow established ssh from dmz to lan
-iptables -A FORWARD -d 192.168.100.0/24 -s 192.168.200.0/24 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+iptables -A FORWARD -d 192.168.100.3 -s 192.168.200.3 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 
 #Allow new ssh from lan to fw
-iptables -A INPUT -s 192.168.100.0/24 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
+iptables -A INPUT -s 192.168.100.3 -p tcp --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
 
 #Allow established ssh from fw to lan
-iptables -A OUTPUT -d 192.168.100.0/24 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -d 192.168.100.3 -p tcp --sport 22 -m state --state ESTABLISHED -j ACCEPT
 ```
 
 ---
@@ -654,7 +654,7 @@ A présent, vous devriez avoir le matériel nécessaire afin de reproduire la ta
 
 ---
 
-![Rules](images/iptable_rules.png)
+![Rules](images/rules.png)
 
 
 ---
